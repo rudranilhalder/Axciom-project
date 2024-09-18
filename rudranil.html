@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><a href="#login">Login</a></li>
+            <li><a href="#issueBook">Issue Book</a></li>
+            <li><a href="#returnBook">Return Book</a></li>
+            <li><a href="#addMembership">Add Membership</a></li>
+        </ul>
+    </nav>
+
+    <!-- Login Section -->
+    <section id="login">
+        <h2>Login</h2>
+        <form id="loginForm" onsubmit="validateLogin(event)">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br>
+            <button type="submit">Login</button>
+        </form>
+    </section>
+
+    <!-- Issue Book Section -->
+    <section id="issueBook">
+        <h2>Issue Book</h2>
+        <form id="issueBookForm" onsubmit="validateIssueBook(event)">
+            <label for="bookName">Book Name:</label>
+            <input type="text" id="bookName" name="bookName" required><br>
+
+            <label for="authorName">Author Name:</label>
+            <input type="text" id="authorName" name="authorName" readonly><br>
+
+            <label for="issueDate">Issue Date:</label>
+            <input type="date" id="issueDate" name="issueDate" required><br>
+
+            <label for="returnDate">Return Date (15 days max):</label>
+            <input type="date" id="returnDate" name="returnDate"><br>
+
+            <label for="remarks">Remarks:</label>
+            <input type="text" id="remarks" name="remarks"><br>
+
+            <button type="submit">Issue Book</button>
+        </form>
+    </section>
+
+    <!-- Return Book Section -->
+    <section id="returnBook">
+        <h2>Return Book</h2>
+        <form id="returnBookForm" onsubmit="validateReturnBook(event)">
+            <label for="returnBookName">Book Name:</label>
+            <input type="text" id="returnBookName" name="returnBookName" required><br>
+
+            <label for="returnAuthorName">Author Name:</label>
+            <input type="text" id="returnAuthorName" name="returnAuthorName" readonly><br>
+
+            <label for="serialNo">Serial Number:</label>
+            <input type="text" id="serialNo" name="serialNo" required><br>
+
+            <label for="issueDate">Issue Date:</label>
+            <input type="date" id="returnIssueDate" name="returnIssueDate" readonly><br>
+
+            <label for="returnDate">Return Date:</label>
+            <input type="date" id="returnReturnDate" name="returnReturnDate"><br>
+
+            <button type="submit">Return Book</button>
+        </form>
+    </section>
+
+    <!-- Add Membership Section -->
+    <section id="addMembership">
+        <h2>Add Membership</h2>
+        <form id="addMembershipForm" onsubmit="validateMembership(event)">
+            <label for="membershipName">Name:</label>
+            <input type="text" id="membershipName" name="membershipName" required><br>
+
+            <label>Membership Duration:</label><br>
+            <input type="radio" id="6months" name="membershipDuration" value="6months" checked>
+            <label for="6months">6 months</label><br>
+
+            <input type="radio" id="1year" name="membershipDuration" value="1year">
+            <label for="1year">1 year</label><br>
+
+            <input type="radio" id="2years" name="membershipDuration" value="2years">
+            <label for="2years">2 years</label><br>
+
+            <button type="submit">Add Membership</button>
+        </form>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+<style>
+css
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+  
+}
+
+h2 {
+    color: #333;
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+</style>
+<script>
+
+
+
+// Login form validation
+function validateLogin(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    if (username && password) {
+        fetch('http://localhost:5000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Login successful') {
+                alert("Login successful!");
+            } else {
+                alert("Invalid credentials.");
+            }
+        });
+    } else {
+        alert("Please fill in all fields.");
+    }
+}
+
+// Issue Book form validation
+function validateIssueBook(event) {
+    event.preventDefault();
+    const bookName = document.getElementById('bookName').value;
+    const authorName = document.getElementById('authorName').value;
+    const issueDate = document.getElementById('issueDate').value;
+    const returnDate = document.getElementById('returnDate').value;
+    const remarks = document.getElementById('remarks').value;
+
+    fetch('http://localhost:5000/issue-book', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ bookName, authorName, issueDate, returnDate, remarks }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+    });
+}
+
+// Return Book form validation
+function validateReturnBook(event) {
+    event.preventDefault();
+    const bookName = document.getElementById('returnBookName').value;
+    const serialNo = document.getElementById('serialNo').value;
+
+    fetch('http://localhost:5000/return-book', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ bookName, serialNo }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+    });
+}
+
+// Membership form validation
+function validateMembership(event) {
+    event.preventDefault();
+    const membershipName = document.getElementById('membershipName').value;
+    const membershipDuration = document.querySelector('input[name="membershipDuration"]:checked').value;
+
+    fetch('http://localhost:5000/add-membership', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ membershipName, membershipDuration }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+    });
+}
+<script/>
+
